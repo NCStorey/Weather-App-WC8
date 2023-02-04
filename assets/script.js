@@ -1,13 +1,14 @@
 let searchBtn = $('#search-button');
-let todayCont = $('#today')
+let todayCont = $('#today');
+let cityInput = $('#search-input');
+
+let URLcity;
+let cityArr = []
 
 let currentTime = moment().format("dddd, Do MMMM YYYY")
-console.log(currentTime)
 
-let city = "london";
-
-let baseURLforecast = "https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid=";
-let baseURLweather = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=";
+let baseURLforecast = "https://api.openweathermap.org/data/2.5/forecast?q="+URLcity+"&appid=";
+let baseURLweather = "https://api.openweathermap.org/data/2.5/weather?q="+URLcity+"&appid=";
 
 let APIkey = "1d7e3c1a43a8848ba84bed69fb61e0e0";
 
@@ -31,10 +32,16 @@ queryURLweather = baseURLweather + APIkey;
 // });
 
 
+
 searchBtn.click(function(event){
+    
+    event.preventDefault()
+    todayCont.empty()
 
-    let h3 = $('<h3>')
-
-
+    city = $('<h3>');
+    city.text( cityInput.val() +" "+ currentTime);
+    todayCont.append(city);
+    cityStored = cityInput.val()
+    localStorage.setItem('city', cityStored)
 
 })
