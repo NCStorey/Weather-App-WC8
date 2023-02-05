@@ -39,3 +39,27 @@
 
 }
 
+h3{
+    padding-left: 1rem;
+    text-decoration: underline;
+}
+
+.currentvar {
+    list-style-type: none;
+    font-size: 1.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 1rem;
+}
+
+.currentIcon{
+    display: inline;
+}
+
+#today{
+    width: 100%;
+}
+
+#forecast{
+    margin-left: 0.1rem;
+    width: 99.8%;
+}
