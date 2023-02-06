@@ -2,43 +2,16 @@ let searchBtn = $('#search-button');
 let todayCont = $('#today');
 let cityInput = $('#search-input');
 let forecastCont = $('#forecast');
-let h4 = $('#h4')
-let forecast1 = $('#forecast1');
-let forecast2 = $('#forecast2');
-let forecast3 = $('#forecast3');
-let forecast4 = $('#forecast4');
-let forecast5 = $('#forecast5');
-let forecast1H = $('#forecast1H')
-let forecast2H = $('#forecast2H')
-let forecast3H = $('#forecast3H')
-let forecast4H = $('#forecast4H')
-let forecast5H = $('#forecast5H')
+let history = $('#history')
 
 
 let cityArr = [];
 
 let currentTime = moment().format("dddd, Do MMMM YYYY");
-let forecastDay1 = moment().add(1, 'd')
-let forecastDay2 = moment().add(2, 'd')
-let forecastDay3 = moment().add(3, 'd')
-let forecastDay4 = moment().add(4, 'd')
-let forecastDay5 = moment().add(5, 'd')
+
 
 
 let APIkey = "1d7e3c1a43a8848ba84bed69fb61e0e0";
-
-// queryURLforecast = baseURLforecast + APIkey;
-
-
-
-// $.ajax({
-//     url: queryURLforecast,
-//     method: "GET"
-//     }).then(function(response){
-
-//     console.log(response)
-// });
-
 
 //remove duplicates from cityArr
 
@@ -50,114 +23,180 @@ searchBtn.click(function(event){
 
     //clears the previous searches from the window
     todayCont.empty()
+    forecastCont.empty()
+    infoRender()
 
-    //capturing the users intput and putting it into a variable
-    let cityStored = cityInput.val().trim()
+    let prevSearchBtn = $('<button>');
+    prevSearchBtn.text(cityInput.val().trim())
+    history.prepend(prevSearchBtn)
 
-    let baseURLweather = "https://api.openweathermap.org/data/2.5/weather?q="+cityStored+"&appid=";
-    queryURLweather = baseURLweather + APIkey;
 
-    //ajax request here
-    $.ajax({
-        url: queryURLweather,
-        method: "GET",
-        success: (function(response){
+})
 
-            console.log(response)
+function infoRender (){
+
+//capturing the users intput and putting it into a variable
+let cityStored = cityInput.val().trim()
     
-            //creating a h3 element to store the user city
-            h3 = $('<h3>');
+let baseURLweather = "https://api.openweathermap.org/data/2.5/weather?q="+cityStored+"&appid=";
+queryURLweather = baseURLweather + APIkey;
 
-            //makes the h3 the text that the user input
-            h3.text(cityStored +" "+ currentTime);
+//ajax request here
+$.ajax({
+    url: queryURLweather,
+    method: "GET",
+    success: (function(response){
 
-            let img = $('<img>')
-            
-            let iconURL = "http://openweathermap.org/img/wn/" + (response.weather[0].icon) + "@2x.png"
+        //creating a h3 element to store the user city
+        h3 = $('<h3>');
 
-            img.attr('src' , iconURL)
-            img.attr('class', 'currentIcon')
+        //makes the h3 the text that the user input
+        h3.text(cityStored +" "+ currentTime);
 
-            h3.append(img)
-            
-
-            //appends the h3 onto the tody container to display and the window
-            todayCont.append(h3);
-
-            //pushes the searched city onto the array
-            cityArr.push(cityStored)
-            console.log(cityArr)
-
-            localStorage.setItem('city', JSON.stringify(cityArr))
-
-            //code to creat current variables and display them in the window
-            let description = response.weather[0].description
-            let temp = (response.main.temp - 273.15).toFixed(1);
-            let wind = response.wind.speed;
-            let humid = response.main.humidity;
-
-            let descriptionli = $('<li>')
-            let templi = $('<li>')
-            let windli = $('<li>')
-            let humidli = $('<li>')
-
-            descriptionli.text('Description: ' + description)
-            descriptionli.attr('class', 'currentvar')
-
-            templi.text('Temperature: ' + temp + ' C')
-            templi.attr('class', 'currentvar')
-
-            windli.text('Wind: ' + wind + " KPH")
-            windli.attr('class', 'currentvar')
-
-            humidli.text('Humidity: ' + humid + '%')
-            humidli.attr('class', 'currentvar')
-            
-            todayCont.append(descriptionli, templi, windli, humidli)
-
-            //logic to create the forecast information
-
-            h4.text('5 Day Forecast')
-
-            forecast1H.text(forecastDay1.format('DD/MM/YYYY'));
-            forecast2H.text(forecastDay2.format('DD/MM/YYYY'));
-            forecast3H.text(forecastDay3.format('DD/MM/YYYY'));
-            forecast4H.text(forecastDay4.format('DD/MM/YYYY'));
-            forecast5H.text(forecastDay5.format('DD/MM/YYYY'));
-
-            let baseURLforecast = "https://api.openweathermap.org/data/2.5/forecast?q="+cityStored+"&appid=";
-            let queryURLforecast = baseURLforecast + APIkey;
-
-            $.ajax({
-            url: queryURLforecast,
-            method: "GET"
-            }).then(function(response){
-
-            console.log(response.list)
-            
-            forecastDay1 = forecastDay1.format('YYYY-MM-DD [12:00:00]');
-            forecastDay2 = forecastDay2.format('YYYY-MM-DD [12:00:00]');
-            forecastDay3 = forecastDay3.format('YYYY-MM-DD [12:00:00]');
-            forecastDay4 = forecastDay4.format('YYYY-MM-DD [12:00:00]');
-            forecastDay5 = forecastDay5.format('YYYY-MM-DD [12:00:00]');
+        let img = $('<img>')
         
-            // function findForecastInfo(forecastday, forecastDiv){
-            //     for (i = 0; i < response.list.length; i++){
-            //         if (i === 
-            //     }
-            // }
-        });
+        let iconURL = "http://openweathermap.org/img/wn/" + (response.weather[0].icon) + "@2x.png"
 
-            }),
+        img.attr('src' , iconURL)
+        img.attr('class', 'currentIcon')
 
-        error: function(error){
-            if (error.responseJSON.cod === "400" || "404"){
-                alert("Invalid input")
+        h3.append(img)
+        
+
+        //appends the h3 onto the tody container to display and the window
+        todayCont.append(h3);
+
+        //pushes the searched city onto the array
+
+        cityArr.push(cityStored)
+        console.log(cityArr)
+
+        localStorage.setItem('city', JSON.stringify(cityArr))
+
+        //code to creat current variables and display them in the window
+        let description = response.weather[0].description
+        let temp = (response.main.temp - 273.15).toFixed(1);
+        let wind = response.wind.speed;
+        let humid = response.main.humidity;
+
+        let descriptionli = $('<li>')
+        let templi = $('<li>')
+        let windli = $('<li>')
+        let humidli = $('<li>')
+
+        descriptionli.text('Description: ' + description)
+        descriptionli.attr('class', 'currentvar')
+
+        templi.text('Temperature: ' + temp + ' C')
+        templi.attr('class', 'currentvar')
+
+        windli.text('Wind: ' + wind + ' KPH')
+        windli.attr('class', 'currentvar')
+
+        humidli.text('Humidity: ' + humid + '%')
+        humidli.attr('class', 'currentvar')
+        
+        todayCont.append(descriptionli, templi, windli, humidli)
+
+        //logic to create the forecast information
+
+        let h4 = $('<h4>')
+        h4.text('5 Day Forecast')
+        h4.attr('id', 'h4')
+        h4.attr('class', 'col-12')
+        forecastCont.append(h4)
+
+        for (let i = 1; i < 6; i++){
+
+            let forecastdiv = $('<div>')
+            forecastdiv.attr('class', 'col border forecastDiv')
+            forecastdiv.attr('id', ('forecast' + [i]))
+            forecastCont.append(forecastdiv)
+
+            let forecastH = $('<h5>')
+            forecastH.attr('class', 'forecastHeading')
+            forecastH.attr('id', ('forecast' + [i] + 'H'))
+            forecastdiv.append(forecastH)
+
+        }
+
+        let forecastDay1 = moment().add(1, 'd')
+        let forecastDay2 = moment().add(2, 'd')
+        let forecastDay3 = moment().add(3, 'd')
+        let forecastDay4 = moment().add(4, 'd')
+        let forecastDay5 = moment().add(5, 'd')
+
+        $('#forecast1H').text(forecastDay1.format('DD/MM/YYYY'));
+        $('#forecast2H').text(forecastDay2.format('DD/MM/YYYY'));
+        $('#forecast3H').text(forecastDay3.format('DD/MM/YYYY'));
+        $('#forecast4H').text(forecastDay4.format('DD/MM/YYYY'));
+        $('#forecast5H').text(forecastDay5.format('DD/MM/YYYY'));
+
+        let baseURLforecast = "https://api.openweathermap.org/data/2.5/forecast?q="+cityStored+"&appid=";
+        let queryURLforecast = baseURLforecast + APIkey;
+
+        $.ajax({
+        url: queryURLforecast,
+        method: "GET"
+        }).then(function(response){
+        
+        forecastDay1 = forecastDay1.format('YYYY-MM-DD [12:00:00]');
+        forecastDay2 = forecastDay2.format('YYYY-MM-DD [12:00:00]');
+        forecastDay3 = forecastDay3.format('YYYY-MM-DD [12:00:00]');
+        forecastDay4 = forecastDay4.format('YYYY-MM-DD [12:00:00]');
+        forecastDay5 = forecastDay5.format('YYYY-MM-DD [12:00:00]');
+    
+        function findForecastInfo(forecastday, forecastDiv){
+            for (i = 0; i < response.list.length; i++){
+                if (response.list[i].dt_txt === forecastday){
+                    let forecastInfo = response.list[i]
+
+                    let forecastImg = $('<img>')
+        
+                    let forecastIconURL = "http://openweathermap.org/img/wn/" + (forecastInfo.weather[0].icon) + "@2x.png"
+        
+                    forecastImg.attr('src' , forecastIconURL)
+                    forecastImg.attr('class', 'forecastIcon')
+
+                    forecastDiv.append(forecastImg)
+
+                    let forecastTemp = ((forecastInfo.main.temp) - 273.15).toFixed(1);
+                    let forecastWind = forecastInfo.wind.speed
+                    let forecastHumid = forecastInfo.main.humidity
+
+                    let forecasttempli = $('<li>')
+                    let forecastwindli = $('<li>')
+                    let forecasthumidli = $('<li>')
+
+                    forecasttempli.text('Temperature: ' + forecastTemp + ' C')
+                    forecastwindli.text('Wind: ' + forecastWind + ' KPH')
+                    forecasthumidli.text('Humidity: ' + forecastHumid + '%')
+
+                    forecastDiv.append(forecasttempli, forecastwindli, forecasthumidli)
+
                 }
             }
-    
-    //ajax request closing brackets
-    })
+        }
 
-//event listener closing brackets
+        findForecastInfo(forecastDay1, $('#forecast1'))
+        findForecastInfo(forecastDay2, $('#forecast2'))
+        findForecastInfo(forecastDay3, $('#forecast3'))
+        findForecastInfo(forecastDay4, $('#forecast4'))
+        findForecastInfo(forecastDay5, $('#forecast5'))
+
+
+
+        });
+
+    }),
+
+    error: function(error){
+        if (error.responseJSON.cod === "400" || "404"){
+            alert("Invalid input")
+            }
+        }
+
+//ajax request closing brackets
 })
+
+}
