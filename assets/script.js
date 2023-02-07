@@ -26,6 +26,16 @@ function makePrevSearchButton(text){
     history.prepend(prevSearchBtn)
 }
 
+let storedArr = JSON.parse(localStorage.getItem("city"))
+
+for (let i = 0; i < storedArr.length; i++){
+
+    makePrevSearchButton(storedArr[i])
+    cityArr.push(storedArr[i])
+
+}
+
+
 
 searchBtn.click(function(event){
 
@@ -220,8 +230,10 @@ function infoRender (cityStored){
     error: function(error){
         if (error.responseJSON.cod === "400" || "404"){
 
-            cityArr.splice(-1, 1)
-            alert("Invalid input")
+            cityArr.splice(-1, 1);
+
+            alert("Invalid input");
+            
 
         }
     }
