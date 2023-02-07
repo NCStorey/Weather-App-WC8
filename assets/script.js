@@ -9,43 +9,69 @@ let cityArr = [];
 
 let currentTime = moment().format("dddd, Do MMMM YYYY");
 
-
-
 let APIkey = "1d7e3c1a43a8848ba84bed69fb61e0e0";
 
-//remove duplicates from cityArr
+
+function urlMaker(city){
+let baseURLweather = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=";
+queryURLweather = baseURLweather + APIkey;}
+
+
+function makePrevSearchButton(text){
+    
+    let prevSearchBtn = $('<button>');
+    prevSearchBtn.text(text)
+    prevSearchBtn.attr('id', (text))
+    prevSearchBtn.attr('class', 'button')
+    history.prepend(prevSearchBtn)
+}
 
 
 searchBtn.click(function(event){
-    
+
     //stop the header dissapearing by preventing the form default
     event.preventDefault()
 
+    cityArr.push(cityInput.val().trim())
+    console.log(cityArr)
     //clears the previous searches from the window
-    todayCont.empty()
-    forecastCont.empty()
-    infoRender()
-
-    let prevSearchBtn = $('<button>');
-    prevSearchBtn.text(cityInput.val().trim())
-    history.prepend(prevSearchBtn)
-
+    
+    infoRender(cityInput.val().trim())
+    
 
 })
 
-function infoRender (){
-
-//capturing the users intput and putting it into a variable
-let cityStored = cityInput.val().trim()
+history.click(function(event){
     
-let baseURLweather = "https://api.openweathermap.org/data/2.5/weather?q="+cityStored+"&appid=";
-queryURLweather = baseURLweather + APIkey;
+    button = event.target
 
-//ajax request here
-$.ajax({
+    if (button.matches('button')){
+        
+        let cityName = button.getAttribute('id')
+        infoRender(cityName)
+
+    }
+
+    
+
+})
+
+
+function infoRender (cityStored){
+
+    todayCont.empty()
+    forecastCont.empty()
+
+    urlMaker(cityStored)
+
+    //ajax request here
+    $.ajax({
     url: queryURLweather,
     method: "GET",
     success: (function(response){
+
+        if (cityInput.val() != ''){
+        makePrevSearchButton((cityInput.val().trim()))}
 
         //creating a h3 element to store the user city
         h3 = $('<h3>');
@@ -68,8 +94,7 @@ $.ajax({
 
         //pushes the searched city onto the array
 
-        cityArr.push(cityStored)
-        console.log(cityArr)
+        
 
         localStorage.setItem('city', JSON.stringify(cityArr))
 
@@ -97,6 +122,8 @@ $.ajax({
         humidli.attr('class', 'currentvar')
         
         todayCont.append(descriptionli, templi, windli, humidli)
+
+        
 
         //logic to create the forecast information
 
@@ -184,7 +211,7 @@ $.ajax({
         findForecastInfo(forecastDay4, $('#forecast4'))
         findForecastInfo(forecastDay5, $('#forecast5'))
 
-
+        cityInput.val('')
 
         });
 
@@ -192,9 +219,12 @@ $.ajax({
 
     error: function(error){
         if (error.responseJSON.cod === "400" || "404"){
+
+            cityArr.splice(-1, 1)
             alert("Invalid input")
-            }
+
         }
+    }
 
 //ajax request closing brackets
 })

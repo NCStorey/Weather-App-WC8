@@ -88,3 +88,17 @@ h4{
     margin-top:1rem;
     font-size: 1.5rem;
 }
+
+#history button{
+    padding: 0.3rem;
+    margin:0.3rem;
+    border-radius: 5px;
+    border: none;
+    background-color: #86afe7;
+    color: aliceblue;
+}
+
+#history button:hover{
+
+    border: solid #153055;
+}
