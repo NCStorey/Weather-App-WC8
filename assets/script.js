@@ -1,33 +1,47 @@
+//var to told html elements
 let searchBtn = $('#search-button');
 let todayCont = $('#today');
 let cityInput = $('#search-input');
 let forecastCont = $('#forecast');
 let history = $('#history')
 
-
+//empty city array declared globally
 let cityArr = [];
 
+//use of moment to display current date
 let currentTime = moment().format("dddd, Do MMMM YYYY");
 
+//open weather API key for current and forecast information.
 let APIkey = "1d7e3c1a43a8848ba84bed69fb61e0e0";
 
 
+//function to make the query URL
 function urlMaker(city){
-let baseURLweather = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=";
-queryURLweather = baseURLweather + APIkey;}
 
+    //uses the base URL + the function input of city 
+    let baseURLweather = "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid=";
+    //creates the query URL in ful for the API request
+    queryURLweather = baseURLweather + APIkey;}
 
+//previous searches to be made into buttons in the history section to allow the user to research a previous city - function to make this button
 function makePrevSearchButton(text){
     
+    //creates the button element
     let prevSearchBtn = $('<button>');
+    //sets the text of the button element using the function input
     prevSearchBtn.text(text)
+    //gives the button and ID tage to allow easy find 
     prevSearchBtn.attr('id', (text))
+    //gives it the button class for styling and easy find
     prevSearchBtn.attr('class', 'button')
+    //prepends button to the history tag so most recent searches show first
     history.prepend(prevSearchBtn)
 }
 
+//this creates a varible to hold the previously save array returned from local storage
 let storedArr = JSON.parse(localStorage.getItem("city"))
 
+//takes the stored array and pushes the items in to the city array to preserve the searches and renders the buttons
 for (let i = 0; i < storedArr.length; i++){
 
     makePrevSearchButton(storedArr[i])
@@ -36,7 +50,7 @@ for (let i = 0; i < storedArr.length; i++){
 }
 
 
-
+//
 searchBtn.click(function(event){
 
     //stop the header dissapearing by preventing the form default
@@ -47,8 +61,6 @@ searchBtn.click(function(event){
     //clears the previous searches from the window
     
     infoRender(cityInput.val().trim())
-    
-
 })
 
 history.click(function(event){
