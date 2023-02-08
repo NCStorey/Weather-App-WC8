@@ -228,7 +228,8 @@ function infoRender (cityStored){
     //catch statement to tell user if the search failed and also to remove the incorrect search from the data 
     error: function(error){
         if (error.responseJSON.cod === "400" || "404"){
-
+            
+            cityInput.val('')
             cityArr.splice(-1, 1);
             alert("Invalid input");
             
