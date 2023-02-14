@@ -42,12 +42,14 @@ function makePrevSearchButton(text){
 let storedArr = JSON.parse(localStorage.getItem("city"))
 
 //takes the stored array and pushes the items in to the city array to preserve the searches and renders the buttons
+if (localStorage.getItem("city") != null){
+
 for (let i = 0; i < storedArr.length; i++){
 
     makePrevSearchButton(storedArr[i])
     cityArr.push(storedArr[i])
 
-}
+}}
 
 //function that performs the ajax requests and makes the required Divs to hold the weather informations. 
 function infoRender (cityStored){
