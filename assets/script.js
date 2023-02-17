@@ -171,11 +171,11 @@ function infoRender (cityStored){
         
         //forecast date stamps are in a certain format YYYY-MM-DD. Time stamp choosen was 12pm formated with [] brackets which will be ignored by moment.
         //below overwrites the previous formats and the variable can now be used to look thorugh the data to pick out specific days and a point in time.
-        forecastDay1 = forecastDay1.format('YYYY-MM-DD [12:00:00]');
-        forecastDay2 = forecastDay2.format('YYYY-MM-DD [12:00:00]');
-        forecastDay3 = forecastDay3.format('YYYY-MM-DD [12:00:00]');
-        forecastDay4 = forecastDay4.format('YYYY-MM-DD [12:00:00]');
-        forecastDay5 = forecastDay5.format('YYYY-MM-DD [12:00:00]');
+        forecastDay1 = forecastDay1.format('YYYY-MM-DD [09:00:00]');
+        forecastDay2 = forecastDay2.format('YYYY-MM-DD [09:00:00]');
+        forecastDay3 = forecastDay3.format('YYYY-MM-DD [09:00:00]');
+        forecastDay4 = forecastDay4.format('YYYY-MM-DD [09:00:00]');
+        forecastDay5 = forecastDay5.format('YYYY-MM-DD [09:00:00]');
     
         //this function creates all of the information needed in each forecast div
         function findForecastInfo(forecastday, forecastDiv){
@@ -211,6 +211,7 @@ function infoRender (cityStored){
                     //appending all of the information to the relative forecast div
                     forecastDiv.append(forecasttempli, forecastwindli, forecasthumidli)
 
+
         }}}
 
         //calling the above function to create the information for the 5 forecast divs
@@ -219,6 +220,8 @@ function infoRender (cityStored){
         findForecastInfo(forecastDay3, $('#forecast3'))
         findForecastInfo(forecastDay4, $('#forecast4'))
         findForecastInfo(forecastDay5, $('#forecast5'))
+
+
 
         //removes the input from the search bar 
         cityInput.val('')
